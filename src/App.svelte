@@ -1,6 +1,6 @@
 <script lang="ts">
   import berlinLogo from './assets/berlin-logo.svg';
-  import landozoneLogo from './assets/landozone_logo.svg';
+  import landozoneLogo from './assets/lz_logo_name.png';
   import { carsharingData } from './data/data';
   import { onMount } from 'svelte';
   import Range from './components/Range.svelte';
@@ -272,6 +272,7 @@
     transition: all 300ms;
     font-size: 2rem;
     box-shadow: 0px 0px 2px 0px #d39e00;
+    -webkit-appearance: none;
   }
 
   .lowest-price td {
