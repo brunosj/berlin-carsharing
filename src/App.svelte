@@ -87,7 +87,7 @@
       src={berlinLogo}
       class="logo"
       alt="Berlin Logo"
-      style="width: 8rem; background-color:white"
+      style="width: 8rem; background-color:white; margin: auto;"
     />
 
     <h3>Carsharing Price Calculator</h3>
@@ -232,10 +232,11 @@
   }
 
   .title {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     margin: auto;
   }
 
