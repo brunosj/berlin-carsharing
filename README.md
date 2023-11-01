@@ -1,15 +1,15 @@
-![landozone](public/berlin-carsharing-price-calculator.png)
+![carsharing-berlin](public/berlin-carsharing-price-calculator.png)
 
 ## Description
 
-This repo contains the Berlin Carsharing Price Calculator app, accessible at [berlin-carsharing.landozone.net](https://carsharing.landozone.net).
+This repo contains the Berlin Carsharing Price Calculator app, accessible at [carsharing.landozone.net](https://carsharing.landozone.net).
 
-When public transport takes too long and your bike still needs to be fixed, carsharing options can be interesting.
-This app compares prices between different providers based on distance and time.
+When public transport takes too long and your bike still needs to be fixed, car sharing options can be interesting.
+This app compares prices between different providers based on distance and time (with an additional parameter for airport pick-up/drop-off)
 
 ## Technologies
 
-The app is a minimalist [Svelte](https://svelte.dev/) + [Vite](https://vitejs.dev/) project deployed on [Vercel](https://vercel.com/).
+This app is a minimalist [Svelte](https://svelte.dev/) + [Vite](https://vitejs.dev/) project deployed on [Vercel](https://vercel.com/).
 
 ## Installation
 
@@ -38,5 +38,7 @@ yarn dev
 Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
 ## Further development
+
+Any input or feedback is appreciated!
 
 This repository is maintained by [brunosj](https://github.com/brunosj).

@@ -1,17 +1,10 @@
 <script lang="ts">
-  import berlinLogo from './assets/berlin-logo.svg';
-  import landozoneLogo from './assets/lz_logo_name.png';
-  import MdiPlaneCar from './assets/MdiPlaneCar.svelte';
   import { carsharingData } from './data/data';
   import { onMount } from 'svelte';
-  import Range from './components/Range.svelte';
-  import { fade, fly } from 'svelte/transition';
-  import { circIn, cubicIn, elasticIn, expoIn, sineIn } from 'svelte/easing';
-
-  let ready = false;
-  onMount(() => (ready = true));
-
-  let jsonData = null;
+  import Header from './components/Header.svelte';
+  import Results from './components/Results.svelte';
+  import Controls from './components/Controls.svelte';
+  import Footer from './components/Footer.svelte';
 
   // Will implement fetching from Dropbox at a later stage
 
@@ -40,6 +33,11 @@
   //   }
   // });
 
+  // Trigger animations
+  let ready = false;
+  onMount(() => (ready = true));
+
+  // Variables
   let distance = 0;
   let time = 0;
   let airport = false;
@@ -49,6 +47,7 @@
   let minPriceTier = null;
   let minPrices = [];
 
+  // Reactive logic
   $: {
     minPrices = [];
     let lowestPrice = Number.POSITIVE_INFINITY;
@@ -90,318 +89,30 @@
       }
     }
   }
-  function updateDistanceFromInput(event) {
-    distance = parseFloat(event.target.value);
-  }
-
-  function updateTimeFromInput(event) {
-    time = parseFloat(event.target.value);
-  }
 </script>
 
-<header>
-  {#if ready}
-    <div class="title" in:fade={{ duration: 700 }}>
-      <img
-        src={berlinLogo}
-        class="logo"
-        alt="Berlin Logo"
-        style="width: 8rem; background-color:white; margin: auto;"
-      />
-
-      <h3>Carsharing Price Calculator</h3>
-    </div>
-  {/if}
-</header>
-
-<main>
-  {#if ready}
-    <div
-      class="results container"
-      in:fly={{ x: -200, duration: 700, easing: sineIn }}
-    >
-      <table>
-        <tr>
-          <th>
-            <h4>Provider</h4>
-          </th>
-          <th>
-            <h4>Tier</h4>
-          </th>
-          <th>
-            <h4>Price (EUR)</h4>
-          </th>
-        </tr>
-        {#each Object.keys(carsharingData) as provider}
-          {#each Object.keys(carsharingData[provider]) as tier}
-            <tr
-              class:lowest-price={minPrices.find(
-                (mp) => mp.provider === provider && mp.tier === tier
-              )}
-            >
-              <td>{provider}</td>
-              <td>{tier}</td>
-              <td
-                class:lowest-price={provider === minPriceProvider &&
-                  tier === minPriceTier}
-                style="font-family:monospace;"
-              >
-                {airport && provider === 'Bolt'
-                  ? 'N/A'
-                  : prices[provider][tier].toFixed(2)}
-              </td>
-            </tr>
-          {/each}
-        {/each}
-      </table>
-    </div>
-
-    <div class="controls container">
-      <div class="control" in:fly={{ y: 200, duration: 700, easing: sineIn }}>
-        <div class="parameter">
-          <label for="distanceInput" class="labelText">Distance (km)</label>
-          <div class="unit">
-            <input
-              type="number"
-              id="distanceTextInput"
-              min="0"
-              max="50"
-              step="1"
-              bind:value={distance}
-              on:input={updateDistanceFromInput}
-              style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace;"
-            />
-            <!-- <span>km</span> -->
-          </div>
-        </div>
-        <div class="range-container">
-          <Range bind:value={distance} id="basic-slider" max={50} />
-        </div>
-      </div>
-
-      <div class="control" in:fly={{ y: 400, duration: 700, easing: sineIn }}>
-        <div class="parameter">
-          <label for="timeInput" class="labelText">Time (minutes)</label>
-          <div class="unit">
-            <input
-              type="number"
-              id="timeTextInput"
-              min="0"
-              max="60"
-              step="1"
-              bind:value={time}
-              on:input={updateTimeFromInput}
-              style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace;"
-            />
-          </div>
-        </div>
-        <div class="range-container">
-          <Range bind:value={time} id="basic-slider" max={60} />
-        </div>
-      </div>
-
-      <div class="control" in:fly={{ y: 600, duration: 700, easing: sineIn }}>
-        <div class="parameter">
-          <div class="airport">
-            <label for="airportInput" class="labelText"
-              >Airport pick-up/drop-off</label
-            >
-            <MdiPlaneCar />
-          </div>
-
-          <input
-            type="checkbox"
-            id="airportCheckbox"
-            bind:checked={airport}
-            style="text-align: center; font-family:monospace;"
-          />
-        </div>
-      </div>
-    </div>
-
-    <footer in:fade={{ duration: 700, delay: 600 }}>
-      <p>latest update: 01.11.2023</p>
-      <div>
-        <p>built by</p>
-        <a href="https://landozone.net" target="_blank">
-          <img
-            src={landozoneLogo}
-            class="logo"
-            alt="Landozone Logo"
-            style="width: 4rem;"
-          />
-        </a>
-      </div>
-    </footer>
-  {/if}
-</main>
+{#if ready}
+  <Header />
+  <main>
+    <Results
+      {carsharingData}
+      {minPrices}
+      {minPriceProvider}
+      {minPriceTier}
+      {airport}
+      {prices}
+    />
+    <Controls bind:distance bind:time bind:airport />
+  </main>
+  <Footer />
+{/if}
 
 <style>
-  header {
-    background-color: #bd2d1e;
-    width: 100%;
-    margin-bottom: 2rem;
-  }
-
   main {
     max-width: 1200;
   }
 
-  footer {
+  :global(.container) {
     margin: 2rem 1.5rem;
-    font-family: monospace;
-    font-size: 0.7rem;
-  }
-
-  h3 {
-    text-align: left;
-    font-family: 'BerlinTypeWeb-Bold';
-  }
-
-  h4 {
-    font-family: 'BerlinTypeWeb-Bold';
-    text-underline-offset: 6px;
-    line-height: normal;
-    margin: 0rem 0rem 0.5rem 0rem;
-    font-family: monospace;
-    letter-spacing: 0rem;
-  }
-
-  table {
-    margin: auto;
-  }
-
-  .title {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-items: center;
-    justify-content: space-around;
-    margin: auto;
-  }
-
-  .container {
-    margin: 2rem 1.5rem;
-  }
-
-  .title {
-    margin: 0rem 1.5rem;
-  }
-
-  .parameter {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .labelText {
-    font-size: 0.9rem;
-    font-family: 'BerlinTypeWeb-Bold';
-    letter-spacing: 0.1rem;
-  }
-
-  .airport {
-    display: flex;
-    flex-direction: row;
-    gap: 0.7rem;
-    align-items: center;
-  }
-
-  .unit {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    border-radius: 12px;
-  }
-
-  .lowest-price {
-    color: #d39e00;
-    transition: all 300ms;
-    font-size: 2rem;
-    box-shadow: 0px 0px 2px 0px #d39e00;
-    -webkit-appearance: none;
-  }
-
-  .lowest-price td {
-    font-size: 1.1rem;
-  }
-
-  .control {
-    background-color: #383838;
-    border-radius: 15px;
-    padding: 1rem;
-    margin-top: 2rem;
-  }
-
-  .range-container {
-    margin-top: 1rem;
-  }
-
-  .results {
-    background-color: #383838;
-    border-radius: 15px;
-    padding: 1rem;
-  }
-
-  .results table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .results th {
-    text-align: center;
-    padding: 4px;
-  }
-
-  .results td {
-    padding: 4px;
-  }
-
-  .results td,
-  .results th {
-    width: 25%;
-  }
-
-  .results td {
-    font-size: 0.9rem;
-  }
-
-  input[type='number'] {
-    background-color: #242424;
-    border: 1px solid #474747;
-    border-radius: 4px;
-  }
-
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    background-color: #242424;
-    border: 1px solid #474747;
-    border-radius: 4px;
-  }
-
-  input[type='checkbox'] {
-    /* Styles for the default checkbox */
-    appearance: none;
-    -webkit-appearance: none;
-    background-color: #242424;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 1px solid #474747;
-    border-radius: 4px;
-    position: relative;
-    transition: background 0.3s, border 0.3s;
-    cursor: pointer;
-  }
-
-  input[type='checkbox']:checked {
-    /* Styles for the checked checkbox */
-    background: linear-gradient(90deg, #d39e00, #bb2e23);
-    border: 1px solid #fff;
-  }
-
-  input[type='checkbox']:focus {
-    /* Styles for the checkbox when focused */
-    outline: none;
   }
 </style>
