@@ -1,4 +1,4 @@
-![carsharing-berlin](public/berlin-carsharing-price-calculator.png)
+![carsharing-berlin](https://brunosj.github.io/images/berlin-carsharing.jpg)
 
 ## Description
 

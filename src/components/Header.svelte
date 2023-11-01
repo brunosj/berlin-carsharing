@@ -12,7 +12,7 @@
       style="width: 8rem; background-color:white; margin: auto;"
     />
 
-    <h3>Carsharing Price Calculator</h3>
+    <h3>Carsharing<br class="line-break" /> Price Calculator</h3>
   </div>
 </header>
 
@@ -35,5 +35,15 @@
   h3 {
     text-align: left;
     font-family: 'BerlinTypeWeb-Bold';
+  }
+
+  @media (min-width: 768px) {
+    .line-break {
+      display: none;
+    }
+
+    h3 {
+      white-space: pre-wrap;
+    }
   }
 </style>
