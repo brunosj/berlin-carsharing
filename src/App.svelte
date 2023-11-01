@@ -1,6 +1,7 @@
 <script lang="ts">
   import berlinLogo from './assets/berlin-logo.svg';
   import landozoneLogo from './assets/lz_logo_name.png';
+  import MdiPlaneCar from './assets/MdiPlaneCar.svelte';
   import { carsharingData } from './data/data';
   import { onMount } from 'svelte';
   import Range from './components/Range.svelte';
@@ -41,6 +42,7 @@
 
   let distance = 0;
   let time = 0;
+  let airport = false;
 
   let prices = {};
   let minPriceProvider = null;
@@ -56,11 +58,28 @@
         const pricePerMinute = carsharingData[provider][tier].pricePerMinute;
         const pricePerKm = carsharingData[provider][tier].pricePerKm;
         const unlockFee = carsharingData[provider][tier].unlockFee;
+        const airportFee = carsharingData[provider][tier].airportFee;
         prices[provider] = prices[provider] || {};
-        prices[provider][tier] =
-          pricePerMinute * time + pricePerKm * distance + unlockFee;
+
+        if (provider === 'Bolt' && airport) {
+          prices[provider][tier] = 'N/A';
+        } else {
+          prices[provider][tier] =
+            pricePerMinute * time +
+            pricePerKm * distance +
+            unlockFee +
+            (airport ? airportFee : 0);
+        }
 
         const price = prices[provider][tier];
+
+        if (price === 'N/A') {
+          continue;
+        }
+
+        if (provider === 'Bolt' && airport) {
+          continue;
+        }
 
         if (price < lowestPrice) {
           lowestPrice = price;
@@ -71,7 +90,6 @@
       }
     }
   }
-
   function updateDistanceFromInput(event) {
     distance = parseFloat(event.target.value);
   }
@@ -82,16 +100,18 @@
 </script>
 
 <header>
-  <div class="title">
-    <img
-      src={berlinLogo}
-      class="logo"
-      alt="Berlin Logo"
-      style="width: 8rem; background-color:white; margin: auto;"
-    />
+  {#if ready}
+    <div class="title" in:fade={{ duration: 700 }}>
+      <img
+        src={berlinLogo}
+        class="logo"
+        alt="Berlin Logo"
+        style="width: 8rem; background-color:white; margin: auto;"
+      />
 
-    <h3>Carsharing Price Calculator</h3>
-  </div>
+      <h3>Carsharing Price Calculator</h3>
+    </div>
+  {/if}
 </header>
 
 <main>
@@ -126,8 +146,10 @@
                   tier === minPriceTier}
                 style="font-family:monospace;"
               >
-                {prices[provider][tier].toFixed(2)}</td
-              >
+                {airport && provider === 'Bolt'
+                  ? 'N/A'
+                  : prices[provider][tier].toFixed(2)}
+              </td>
             </tr>
           {/each}
         {/each}
@@ -175,6 +197,24 @@
         </div>
         <div class="range-container">
           <Range bind:value={time} id="basic-slider" max={60} />
+        </div>
+      </div>
+
+      <div class="control" in:fly={{ y: 600, duration: 700, easing: sineIn }}>
+        <div class="parameter">
+          <div class="airport">
+            <label for="airportInput" class="labelText"
+              >Airport pick-up/drop-off</label
+            >
+            <MdiPlaneCar />
+          </div>
+
+          <input
+            type="checkbox"
+            id="airportCheckbox"
+            bind:checked={airport}
+            style="text-align: center; font-family:monospace;"
+          />
         </div>
       </div>
     </div>
@@ -261,6 +301,13 @@
     letter-spacing: 0.1rem;
   }
 
+  .airport {
+    display: flex;
+    flex-direction: row;
+    gap: 0.7rem;
+    align-items: center;
+  }
+
   .unit {
     display: flex;
     flex-direction: row;
@@ -323,11 +370,38 @@
   input[type='number'] {
     background-color: #242424;
     border: 1px solid #474747;
+    border-radius: 4px;
   }
 
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     background-color: #242424;
     border: 1px solid #474747;
+    border-radius: 4px;
+  }
+
+  input[type='checkbox'] {
+    /* Styles for the default checkbox */
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #242424;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid #474747;
+    border-radius: 4px;
+    position: relative;
+    transition: background 0.3s, border 0.3s;
+    cursor: pointer;
+  }
+
+  input[type='checkbox']:checked {
+    /* Styles for the checked checkbox */
+    background: linear-gradient(90deg, #d39e00, #bb2e23);
+    border: 1px solid #fff;
+  }
+
+  input[type='checkbox']:focus {
+    /* Styles for the checkbox when focused */
+    outline: none;
   }
 </style>
