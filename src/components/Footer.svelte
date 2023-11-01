@@ -20,7 +20,7 @@
 
 <style>
   footer {
-    margin: 2rem 1.5rem;
+    margin: 1.5rem 1.5rem;
     font-family: monospace;
     font-size: 0.7rem;
   }

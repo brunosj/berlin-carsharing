@@ -12,7 +12,7 @@
 
 <div
   class="results container"
-  in:fly={{ x: -200, duration: 700, easing: sineIn }}
+  in:fly={{ y: 400, duration: 700, easing: sineIn }}
 >
   <table>
     <tr>
@@ -90,6 +90,7 @@
 
   .results td {
     font-size: 0.9rem;
+    letter-spacing: 0.1rem;
   }
 
   h4 {

@@ -32,10 +32,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   width: 100vw;
+  margin: auto;
 }
 
 #app {
-  max-width: 800px;
   width: 100%;
   margin: 0 auto;
   text-align: center;

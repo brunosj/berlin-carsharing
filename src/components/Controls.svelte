@@ -18,7 +18,7 @@
 </script>
 
 <div class="controls container">
-  <div class="control" in:fly={{ y: 200, duration: 700, easing: sineIn }}>
+  <div class="control" in:fly={{ y: 100, duration: 700, easing: sineIn }}>
     <div class="parameter">
       <label for="distanceInput" class="labelText">Distance (km)</label>
       <div class="unit">
@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div class="control" in:fly={{ y: 400, duration: 700, easing: sineIn }}>
+  <div class="control" in:fly={{ y: 200, duration: 700, easing: sineIn }}>
     <div class="parameter">
       <label for="timeInput" class="labelText">Time (minutes)</label>
       <div class="unit">
@@ -61,7 +61,7 @@
     </div>
   </div>
 
-  <div class="control" in:fly={{ y: 600, duration: 700, easing: sineIn }}>
+  <div class="control" in:fly={{ y: 300, duration: 700, easing: sineIn }}>
     <div class="parameter">
       <div class="airport">
         <label for="airportInput" class="labelText"
@@ -112,11 +112,11 @@
     background-color: #383838;
     border-radius: 15px;
     padding: 1rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   .range-container {
-    margin-top: 1rem;
+    margin-top: 0.7rem;
   }
 
   input[type='number'] {

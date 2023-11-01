@@ -94,6 +94,7 @@
 {#if ready}
   <Header />
   <main>
+    <Controls bind:distance bind:time bind:airport />
     <Results
       {carsharingData}
       {minPrices}
@@ -102,17 +103,17 @@
       {airport}
       {prices}
     />
-    <Controls bind:distance bind:time bind:airport />
   </main>
   <Footer />
 {/if}
 
 <style>
   main {
-    max-width: 1200;
+    max-width: 800px;
+    margin: auto;
   }
 
   :global(.container) {
-    margin: 2rem 1.5rem;
+    margin: 1.5rem 1.5rem;
   }
 </style>
