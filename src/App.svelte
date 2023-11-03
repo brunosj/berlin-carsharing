@@ -1,108 +1,62 @@
 <script lang="ts">
-  import { carsharingData } from './data/data';
+  import { shortTripData } from './data/shortTripData';
+  import { longTripData } from './data/longTripData';
   import { onMount } from 'svelte';
   import Header from './components/Header.svelte';
-  import Results from './components/Results.svelte';
-  import Controls from './components/Controls.svelte';
+  import ShortTrip from './components/ShortTrip/ShortTrip.svelte';
+  import LongTrip from './components/LongTrip/LongTrip.svelte';
+  import Information from './components/Information.svelte';
   import Footer from './components/Footer.svelte';
 
-  // Will implement fetching from Dropbox at a later stage
+  import { fly, fade } from 'svelte/transition';
+  import { sineIn } from 'svelte/easing';
 
-  // onMount(async () => {
-  //   const dropboxToken = import.meta.env.DROPBOX_ACCESS_TOKEN;
-  //   const dropboxPath = import.meta.env.DROPBOX_PATH;
-
-  //   const dropboxURL = `https://content.dropboxapi.com/2/files/download`;
-  //   const headers = new Headers({
-  //     Authorization: `Bearer ${dropboxToken}`,
-  //     'Dropbox-API-Arg': JSON.stringify({ path: dropboxPath }),
-  //   });
-
-  //   try {
-  //     const response = await fetch(dropboxURL, { method: 'POST', headers });
-  //     if (response.status === 200) {
-  //       jsonData = await response.json();
-  //     } else {
-  //       console.error(
-  //         'Failed to fetch data from Dropbox:',
-  //         response.statusText
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('An error occurred while fetching data:', error);
-  //   }
-  // });
+  import Switch from './components/Switch.svelte';
 
   // Trigger animations
   let ready = false;
   onMount(() => (ready = true));
 
-  // Variables
-  let distance = 0;
-  let time = 0;
-  let airport = false;
+  let showShortTrip = true;
+  let showLongTrip = false;
+  let multiValue = '< 1 hour';
 
-  let prices = {};
-  let minPriceProvider = null;
-  let minPriceTier = null;
-  let minPrices = [];
-
-  // Reactive logic
   $: {
-    minPrices = [];
-    let lowestPrice = Number.POSITIVE_INFINITY;
-
-    for (const provider in carsharingData) {
-      for (const tier in carsharingData[provider]) {
-        const pricePerMinute = carsharingData[provider][tier].pricePerMinute;
-        const pricePerKm = carsharingData[provider][tier].pricePerKm;
-        const unlockFee = carsharingData[provider][tier].unlockFee;
-        const airportFee = carsharingData[provider][tier].airportFee;
-        prices[provider] = prices[provider] || {};
-
-        if (provider === 'Bolt' && airport) {
-          prices[provider][tier] = 'N/A';
-        } else {
-          prices[provider][tier] =
-            pricePerMinute * time +
-            pricePerKm * distance +
-            unlockFee +
-            (airport ? airportFee : 0);
-        }
-
-        const price = prices[provider][tier];
-
-        if (price === 'N/A') {
-          continue;
-        }
-
-        if (provider === 'Bolt' && airport) {
-          continue;
-        }
-
-        if (price < lowestPrice) {
-          lowestPrice = price;
-          minPrices = [{ provider, tier }];
-        } else if (price === lowestPrice) {
-          minPrices.push({ provider, tier });
-        }
-      }
+    if (multiValue === '< 1 hour') {
+      showShortTrip = true;
+      showLongTrip = false;
+    } else if (multiValue === '> 1 hour') {
+      showShortTrip = false;
+      showLongTrip = true;
     }
   }
 </script>
 
 {#if ready}
   <Header />
+
   <main>
-    <Controls bind:distance bind:time bind:airport />
-    <Results
-      {carsharingData}
-      {minPrices}
-      {minPriceProvider}
-      {minPriceTier}
-      {airport}
-      {prices}
-    />
+    <div in:fade={{ duration: 700 }}>
+      <Switch
+        bind:value={multiValue}
+        label="Trip duration"
+        design="multi"
+        options={['< 1 hour', '> 1 hour']}
+        fontSize={12}
+      />
+    </div>
+
+    <div in:fly={{ y: 200, duration: 300, easing: sineIn }}>
+      {#if showShortTrip}
+        <ShortTrip {shortTripData} />
+      {/if}
+
+      {#if showLongTrip}
+        <LongTrip {longTripData} />
+      {/if}
+    </div>
+
+    <Information />
   </main>
   <Footer />
 {/if}

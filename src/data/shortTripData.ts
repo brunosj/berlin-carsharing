@@ -1,4 +1,4 @@
-export const carsharingData = {
+export const shortTripData = {
   Bolt: {
     Drive: {
       pricePerMinute: 0.15,
@@ -8,13 +8,25 @@ export const carsharingData = {
     },
   },
   MILES: {
-    'S - M': {
+    S: {
       pricePerMinute: 0,
       pricePerKm: 0.98,
       unlockFee: 1.0,
       airportFee: 5.0,
     },
-    'L - XL': {
+    M: {
+      pricePerMinute: 0,
+      pricePerKm: 0.98,
+      unlockFee: 1.0,
+      airportFee: 5.0,
+    },
+    L: {
+      pricePerMinute: 0,
+      pricePerKm: 1.29,
+      unlockFee: 2.0,
+      airportFee: 5.0,
+    },
+    XL: {
       pricePerMinute: 0,
       pricePerKm: 1.29,
       unlockFee: 2.0,
@@ -43,7 +55,7 @@ export const carsharingData = {
   },
   SIXT: {
     Share: {
-      pricePerMinute: 0.29,
+      pricePerMinute: 0.31,
       pricePerKm: 0,
       unlockFee: 1,
       airportFee: 8,
