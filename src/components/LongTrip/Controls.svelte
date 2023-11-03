@@ -49,7 +49,7 @@
           step="1"
           bind:value={distance}
           on:input={updateDistanceFromInput}
-          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace;"
+          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white"
         />
       </div>
     </div>

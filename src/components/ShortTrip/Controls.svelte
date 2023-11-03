@@ -27,7 +27,7 @@
           step="1"
           bind:value={time}
           on:input={updateTimeFromInput}
-          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace;"
+          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
         />
       </div>
     </div>

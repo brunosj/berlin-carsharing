@@ -4,7 +4,7 @@
 </script>
 
 <footer in:fade={{ duration: 700, delay: 600 }}>
-  <p>latest update: 01.11.2023</p>
+  <p>latest update: 03.11.2023</p>
   <div>
     <p>built by</p>
     <a href="https://landozone.net" target="_blank">

@@ -75,7 +75,11 @@
           value={option}
           bind:group={value}
         />
-        <label for={`${option}-${uniqueID}`} class="labelText">
+        <label
+          for={`${option}-${uniqueID}`}
+          class="labelText"
+          style="cursor: pointer;"
+        >
           {option}
         </label>
       {/each}
