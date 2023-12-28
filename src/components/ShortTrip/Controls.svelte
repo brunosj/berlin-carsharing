@@ -1,9 +1,10 @@
 <script>
-  export let distance = 0;
-  export let time = 0;
+  export let distance;
+  export let time;
   export let airport = false;
   import MdiPlaneCar from '../../assets/MdiPlaneCar.svelte';
   import Range from '../Range.svelte';
+  import GeoLocation from './GeoLocation.svelte';
 
   function updateDistanceFromInput(event) {
     distance = parseFloat(event.target.value);
@@ -14,8 +15,9 @@
   }
 </script>
 
-<div class="controls container">
-  <div class="control">
+<div class="container">
+  <GeoLocation bind:distanceRounded={distance} bind:durationRounded={time} />
+  <!-- <div class="control">
     <div class="parameter">
       <label for="timeInput" class="labelText">Duration (minutes)</label>
       <div class="unit">
@@ -34,9 +36,9 @@
     <div class="range-container">
       <Range bind:value={time} max={60} />
     </div>
-  </div>
+  </div> -->
 
-  <div class="control">
+  <!-- <div class="control">
     <div class="parameter">
       <label for="distanceInput" class="labelText">Distance (km)</label>
       <div class="unit">
@@ -50,14 +52,12 @@
           on:input={updateDistanceFromInput}
           style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
         />
-        <!-- <span>km</span> -->
       </div>
     </div>
-
     <div class="range-container">
       <Range bind:value={distance} id="basic-slider" max={50} />
     </div>
-  </div>
+  </div> -->
 
   <div class="control">
     <div class="parameter">
@@ -111,7 +111,7 @@
     background-color: #383838;
     border-radius: 15px;
     padding: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
 
   :global(.range-container) {
@@ -141,7 +141,9 @@
     border: 1px solid #474747;
     border-radius: 4px;
     position: relative;
-    transition: background 0.3s, border 0.3s;
+    transition:
+      background 0.3s,
+      border 0.3s;
     cursor: pointer;
   }
 
@@ -159,6 +161,9 @@
   @media (min-width: 768px) {
     :global(.unit) {
       gap: 8px;
+    }
+    :global(.labelText) {
+      font-size: 1rem;
     }
   }
 </style>
