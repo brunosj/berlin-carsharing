@@ -9,21 +9,27 @@
     <li>
       <strong>Toggle Trip Duration</strong>
       <p>
-        Use the switch at the top to toggle between short trips (less than 1
-        hour) and long trips (more than 1 hour)
+        Use the switch at the top to toggle between short trip (less than 1
+        hour) or long trip (more than 1 hour)
       </p>
     </li>
 
     <li>
       <strong>Short Trip (Less Than 1 Hour)</strong>
       <ul>
-        <li>Enter your origin and destination</li>
+        <li>
+          Add your origin and destination (you may use your current location as
+          origin by checking the box above the field)
+        </li>
         <li>
           The app automatically calculates distance and duration, considering
           real-time traffic data
         </li>
         <li>Optionally, add airport pick-up/drop-off</li>
-        <li>The cheapest provider and its price are highlighted in yellow</li>
+        <li>
+          The cheapest provider and the estimated price are highlighted in
+          yellow
+        </li>
       </ul>
     </li>
 
@@ -32,7 +38,10 @@
       <ul>
         <li>Select your preferred trip duration</li>
         <li>Enter the number of kilometers you plan to travel</li>
-        <li>The cheapest provider and its price are highlighted in yellow</li>
+        <li>
+          The cheapest provider and the estimated price are highlighted in
+          yellow
+        </li>
       </ul>
     </li>
   </ol>
@@ -40,16 +49,13 @@
   <h2 style="margin-top:2rem">Data Privacy</h2>
   <ul>
     <li>
-      The app collects and processes the origin and destination locations you
-      provide for trip planning purposes (for short trips)
+      When choosing a short trip, the app collects and processes the origin and
+      destination locations you provide by using Google Maps APIs
     </li>
-    <li>
-      The app uses Google-powered APIs to enhance location accuracy and
-      efficiency
-    </li>
+
     <li>
       Your location data is used solely for trip planning and is immediately
-      deleted. It is not shared with third parties for any purposes.
+      deleted afterwards, it is not shared with third parties for any purposes
     </li>
   </ul>
 
@@ -69,7 +75,7 @@
   }
 
   ol {
-    padding: 0rem 0rem 0rem 1.7rem;
+    padding: 0rem 0rem 0rem 1.6rem;
   }
 
   ol > li {
@@ -77,7 +83,7 @@
   }
 
   ul {
-    padding: 0rem 0.5rem;
+    padding: 0rem 0rem 0rem 0.8rem;
   }
 
   li {

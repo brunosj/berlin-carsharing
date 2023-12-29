@@ -34,11 +34,12 @@
         let totalPrice: number | string = 'N/A';
 
         if (includedKms && distance <= includedKms) {
-          totalPrice = price;
+          totalPrice = price !== null ? price : 'N/A';
         } else {
           const extraKmsPrice = extraKms > 0 ? extraKms : pricePerKm;
           const extraKmsAmount = includedKms ? distance - includedKms : 0;
-          totalPrice = price + extraKmsAmount * extraKmsPrice;
+          totalPrice =
+            price !== null ? price + extraKmsAmount * extraKmsPrice : 'N/A';
         }
 
         const formattedPrice = tierData.price
@@ -56,8 +57,8 @@
         }
 
         if (totalPrice.toString() !== 'N/A') {
-          if (totalPrice < lowestPrice) {
-            lowestPrice = totalPrice;
+          if (Number(totalPrice) < lowestPrice) {
+            lowestPrice = Number(totalPrice);
             minPriceProvider = provider;
             minPriceTier = tier;
             minPrices = [{ provider, tier }];

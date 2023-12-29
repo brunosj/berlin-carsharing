@@ -105,6 +105,13 @@
         console.error('Error calculating distance and duration:', error);
       }
     }
+
+    const originInput = document.getElementById(
+      'originAutocomplete'
+    ) as HTMLInputElement;
+    originInput.addEventListener('focus', () => {
+      errorMessage = '';
+    });
   });
 
   async function getCurrentLocation() {
@@ -126,7 +133,7 @@
     } catch (error) {
       console.error('Error getting current location:', error);
       errorMessage =
-        'Error retrieving current location. Check your Privacy settings.';
+        'error retrieving current location - check your privacy settings or enter origin manually';
       isCurrentLocationChecked = false;
     }
   }
@@ -150,11 +157,23 @@
         parseFloat(duration.replace(',', '.').replace(' min', '')) * 10
       ) / 10
     : 0;
-
-  $: console.log(originAddress);
 </script>
 
 <div class="control">
+  <div class="currentLocation">
+    <div class="currentLocationChild">
+      <input
+        type="checkbox"
+        id="currentLocationCheckbox"
+        bind:checked={isCurrentLocationChecked}
+        on:click={getCurrentLocation}
+        style="text-align: center; font-family:monospace;"
+      />
+      <label for="currentLocationInput" class="smallLabelText"
+        >Use current location as origin</label
+      >
+    </div>
+  </div>
   <div class="parameterInput">
     <div>
       <Circle />
@@ -180,18 +199,7 @@
       class="input"
     />
   </div>
-  <div class="currentLocation">
-    <label for="airportInput" class="smallLabelText"
-      >Use current location as origin</label
-    >
-    <input
-      type="checkbox"
-      id="airportCheckbox"
-      bind:checked={isCurrentLocationChecked}
-      on:click={getCurrentLocation}
-      style="text-align: center; font-family:monospace;"
-    />
-  </div>
+
   {#if errorMessage}
     <p style="color: red; font-size:0.9rem">{errorMessage}</p>
   {/if}
@@ -217,12 +225,16 @@
   }
 
   .currentLocation {
-    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
     display: flex;
-    gap: 0.5rem;
+  }
+
+  .currentLocationChild {
+    margin: auto;
+    display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.5rem;
   }
 
   .destination {
@@ -320,6 +332,11 @@
   @media (min-width: 768px) {
     :global(.smallLabelText) {
       font-size: 0.9rem;
+    }
+
+    .currentLocation {
+      margin-bottom: 1rem;
+      display: flex;
     }
   }
 </style>

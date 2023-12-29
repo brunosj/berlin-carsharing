@@ -19,7 +19,7 @@
 
   let showShortTrip = true;
   let showLongTrip = false;
-  let multiValue = 'short';
+  let multiValue = 'short trip';
 
   $: {
     if (multiValue === 'short trip') {

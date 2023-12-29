@@ -98,7 +98,7 @@ export const longTripData = {
         extraKms: 0.59,
       },
       'day': {
-        price: 100,
+        price: 99,
         includedKms: 125,
         pricePerKm: 0,
         extraKms: 0.59,
