@@ -1,8 +1,8 @@
-<!-- Results.svelte -->
-<script>
-  export let priceData;
-  export let minPrices;
+<script lang="ts">
+  export let priceData: PriceData[];
+  export let minPrices: MinPrices[];
 
+  import type { LongTripData, PriceData, MinPrices } from '../../types/types';
   import { fade } from 'svelte/transition';
   import { sineIn } from 'svelte/easing';
 </script>

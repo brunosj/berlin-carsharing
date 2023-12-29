@@ -1,18 +1,10 @@
-<script>
-  export let distance;
-  export let time;
+<script lang="ts">
+  export let distance = 0;
+  export let time = 0;
   export let airport = false;
   import MdiPlaneCar from '../../assets/MdiPlaneCar.svelte';
   import Range from '../Range.svelte';
   import GeoLocation from './GeoLocation.svelte';
-
-  function updateDistanceFromInput(event) {
-    distance = parseFloat(event.target.value);
-  }
-
-  function updateTimeFromInput(event) {
-    time = parseFloat(event.target.value);
-  }
 </script>
 
 <div class="container">

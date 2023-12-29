@@ -1,17 +1,19 @@
-<script>
-  import { onMount, afterUpdate } from 'svelte';
+<script lang="ts">
+  import { onMount } from 'svelte';
   import { Loader } from '@googlemaps/js-api-loader';
   import Location from '../../assets/Location.svelte';
   import Circle from '../../assets/Circle.svelte';
 
-  let originAutocomplete;
-  let destinationAutocomplete;
+  let originAutocomplete: google.maps.places.Autocomplete;
+  let destinationAutocomplete: google.maps.places.Autocomplete;
 
-  let originAddress;
-  let destinationAddress;
+  let originAddress: google.maps.places.PlaceResult;
+  let destinationAddress: google.maps.places.PlaceResult;
 
-  let distance;
-  let duration;
+  let distance: string;
+  let duration: string;
+  let errorMessage: string = '';
+  let isCurrentLocationChecked: boolean = false;
 
   export let distanceRounded = 0;
   export let durationRounded = 0;
@@ -32,15 +34,15 @@
       if (e) {
         console.log(e);
       } else {
-        // @ts-ignore
         originAutocomplete = new google.maps.places.Autocomplete(
-          document.getElementById('originAutocomplete'),
+          document.getElementById('originAutocomplete') as HTMLInputElement,
           options
         );
         originAutocomplete.addListener('place_changed', onOriginPlaceChanged);
-        // @ts-ignore
         destinationAutocomplete = new google.maps.places.Autocomplete(
-          document.getElementById('destinationAutocomplete'),
+          document.getElementById(
+            'destinationAutocomplete'
+          ) as HTMLInputElement,
           options
         );
         destinationAutocomplete.addListener(
@@ -63,25 +65,33 @@
     async function calculateDistanceAndDuration() {
       try {
         if (originAddress && destinationAddress) {
-          const originLocation = originAddress.geometry.location;
-          const destinationLocation = destinationAddress.geometry.location;
-          // @ts-ignore
+          const originLocation = originAddress?.geometry?.location;
+          const destinationLocation = destinationAddress?.geometry?.location;
+
+          if (!originLocation || !destinationLocation) {
+            console.error('Origin or destination location not available');
+            return;
+          }
           const service = new google.maps.DistanceMatrixService();
           service.getDistanceMatrix(
             {
               origins: [originLocation],
               destinations: [destinationLocation],
-              travelMode: 'DRIVING',
+              travelMode: google.maps.TravelMode.DRIVING,
               drivingOptions: {
                 departureTime: new Date(Date.now()),
-                trafficModel: 'bestguess',
+                trafficModel: google.maps.TrafficModel.BEST_GUESS,
               },
             },
             (response, status) => {
-              if (status === 'OK') {
-                distance = response.rows[0].elements[0].distance.text;
-                duration =
-                  response.rows[0].elements[0].duration_in_traffic.text;
+              if (status === 'OK' && response) {
+                const firstRow = response.rows[0];
+                if (firstRow && firstRow.elements[0]) {
+                  distance = firstRow.elements[0].distance.text;
+                  duration = firstRow.elements[0].duration_in_traffic.text;
+                } else {
+                  console.error('Invalid response format:', response);
+                }
               } else {
                 console.error(
                   'Error calculating distance and duration:',
@@ -100,20 +110,24 @@
   async function getCurrentLocation() {
     try {
       const position = await getCurrentPosition();
-      const { latitude, longitude } = position.coords;
-      // @ts-ignore
+      const { latitude, longitude } = (position as GeolocationPosition).coords;
       const geocoder = new google.maps.Geocoder();
 
       geocoder.geocode(
         { location: { lat: latitude, lng: longitude } },
         (results, status) => {
-          if (status === 'OK' && results[0]) {
+          if (status === 'OK' && results && results[0]) {
             originAddress = results[0];
+            errorMessage = '';
+            isCurrentLocationChecked = true;
           }
         }
       );
     } catch (error) {
       console.error('Error getting current location:', error);
+      errorMessage =
+        'Error retrieving current location. Check your Privacy settings.';
+      isCurrentLocationChecked = false;
     }
   }
 
@@ -144,7 +158,6 @@
   <div class="parameterInput">
     <div>
       <Circle />
-      <!-- <label for="originAutocomplete" class="labelText"></label> -->
     </div>
     <input
       type="text"
@@ -158,7 +171,6 @@
   <div class="parameterInput destination">
     <div>
       <Location />
-      <!-- <label for="destinationAutocomplete" class="labelText"></label> -->
     </div>
     <input
       type="text"
@@ -175,14 +187,18 @@
     <input
       type="checkbox"
       id="airportCheckbox"
+      bind:checked={isCurrentLocationChecked}
       on:click={getCurrentLocation}
       style="text-align: center; font-family:monospace;"
     />
   </div>
+  {#if errorMessage}
+    <p style="color: red; font-size:0.9rem">{errorMessage}</p>
+  {/if}
   {#if distance && duration}
     <div class="results">
       <p>{distance} - {duration}</p>
-      <!-- <span>2.7 km - 8 mins</span> -->
+      <!-- <span>2.7 km | 8 mins</span> -->
     </div>
   {/if}
 </div>
@@ -222,7 +238,15 @@
     letter-spacing: 0.1rem;
     margin-bottom: 0;
     color: #d39e00;
-    font-weight: 700;
+    font-weight: 500;
+  }
+
+  .results span {
+    color: #d39e00;
+    transition: all 300ms;
+    box-shadow: 0px 0px 2px 0px #d39e00;
+    -webkit-appearance: none;
+    padding: 0.7rem;
   }
 
   .numbers {

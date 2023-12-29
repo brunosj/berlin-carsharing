@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
   // taken from this REPL: https://svelte.dev/repl/d65a4e9f0ae74d1eb1b08d13e428af32?version=3.35.0
   // based on suggestions from:
   // Inclusive Components by Heydon Pickering https://inclusive-components.design/toggle-button/
   // On Designing and Building Toggle Switches by Sara Soueidan https://www.sarasoueidan.com/blog/toggle-switch-design/
   // and this example by Scott O'hara https://codepen.io/scottohara/pen/zLZwNv
 
-  export let label;
+  export let label = '';
   export let design = 'inner label';
-  export let options = [];
+  export let options = ['on', 'off'];
   export let fontSize = 16;
   export let value = 'on';
 
@@ -15,13 +15,10 @@
 
   const uniqueID = Math.floor(Math.random() * 100);
 
-  function handleClick(event) {
-    const target = event.target;
-
+  function handleClick(event: MouseEvent) {
+    const target = event.target as HTMLInputElement;
     const state = target.getAttribute('aria-checked');
-
     checked = state === 'true' ? false : true;
-
     value = checked === true ? 'on' : 'off';
   }
 

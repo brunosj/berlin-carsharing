@@ -1,8 +1,10 @@
-<script>
-  export let shortTripData;
-  export let minPrices;
-  export let airport;
-  export let prices;
+<script lang="ts">
+  export let shortTripData: ShortTripData = {};
+  export let minPrices: MinPrices[];
+  export let airport = false;
+  export let prices: Prices = {};
+
+  import type { ShortTripData, Prices, MinPrices } from '../../types/types';
 </script>
 
 <div class="results container">
@@ -30,7 +32,8 @@
           <td style="font-family:monospace;">
             {airport && provider === 'Bolt'
               ? 'N/A'
-              : prices[provider][tier].toFixed(2)}
+              : // @ts-ignore
+                prices[provider][tier].toFixed(2)}
           </td>
         </tr>
       {/each}
@@ -44,11 +47,11 @@
     transition: all 300ms;
     box-shadow: 0px 0px 2px 0px #d39e00;
     -webkit-appearance: none;
+    appearance: none;
   }
 
   :global(.results) {
     background-color: #383838;
-    border-radius: 15px;
     padding: 1rem;
   }
 

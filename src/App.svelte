@@ -19,13 +19,13 @@
 
   let showShortTrip = true;
   let showLongTrip = false;
-  let multiValue = '< 1 hour';
+  let multiValue = 'short';
 
   $: {
-    if (multiValue === '< 1 hour') {
+    if (multiValue === 'short trip') {
       showShortTrip = true;
       showLongTrip = false;
-    } else if (multiValue === '> 1 hour') {
+    } else if (multiValue === 'long trip') {
       showShortTrip = false;
       showLongTrip = true;
     }
@@ -39,9 +39,9 @@
     <div in:fade={{ duration: 700 }}>
       <Switch
         bind:value={multiValue}
-        label="Trip duration"
+        label=""
         design="multi"
-        options={['< 1 hour', '> 1 hour']}
+        options={['short trip', 'long trip']}
         fontSize={12}
       />
     </div>

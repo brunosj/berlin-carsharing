@@ -1,6 +1,7 @@
-<script>
-  export let shortTripData;
+<script lang="ts">
+  export let shortTripData: ShortTripData = {};
 
+  import type { ShortTripData, Prices, MinPrices } from '../../types/types';
   import Results from './Results.svelte';
   import Controls from './Controls.svelte';
   import { fade, fly } from 'svelte/transition';
@@ -10,10 +11,10 @@
   let time = 0;
   let airport = false;
 
-  let prices = {};
+  let prices: Prices = {};
   let minPriceProvider = null;
   let minPriceTier = null;
-  let minPrices = [];
+  let minPrices: MinPrices[] = [];
 
   // Reactive logic
   $: {
@@ -34,8 +35,8 @@
           prices[provider][tier] =
             pricePerMinute * time +
             pricePerKm * distance +
-            unlockFee +
-            (airport ? airportFee : 0);
+            (unlockFee ?? 0) +
+            (airport ? airportFee ?? 0 : 0);
         }
 
         const price = prices[provider][tier];

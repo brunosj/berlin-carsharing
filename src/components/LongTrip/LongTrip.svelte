@@ -1,6 +1,7 @@
-<!-- CarSharingComparison.svelte -->
-<script>
-  export let longTripData;
+<script lang="ts">
+  export let longTripData: LongTripData = {};
+
+  import type { LongTripData, PriceData, MinPrices } from '../../types/types';
   import Range from '../Range.svelte';
   import { fade, fly } from 'svelte/transition';
   import { sineIn } from 'svelte/easing';
@@ -8,13 +9,13 @@
   import Results from './Results.svelte';
 
   let time = '1h';
-  let distance = 0;
+  let distance: number;
 
-  let priceData = [];
+  let priceData: PriceData[] = [];
 
   let minPriceProvider = null;
   let minPriceTier = null;
-  let minPrices = [];
+  let minPrices: MinPrices[] = [];
 
   $: {
     minPrices = [];
@@ -30,18 +31,18 @@
         const pricePerKm = tierData.pricePerKm;
         const extraKms = tierData.extraKms || 0;
 
-        let totalPrice;
+        let totalPrice: number | string = 'N/A';
 
-        if (distance <= includedKms) {
+        if (includedKms && distance <= includedKms) {
           totalPrice = price;
         } else {
           const extraKmsPrice = extraKms > 0 ? extraKms : pricePerKm;
-          const extraKmsAmount = distance - includedKms;
+          const extraKmsAmount = includedKms ? distance - includedKms : 0;
           totalPrice = price + extraKmsAmount * extraKmsPrice;
         }
 
         const formattedPrice = tierData.price
-          ? parseFloat(totalPrice).toFixed(2)
+          ? parseFloat(totalPrice.toString()).toFixed(2)
           : 'N/A';
 
         updatedPriceData.push({
@@ -54,7 +55,7 @@
           continue;
         }
 
-        if (totalPrice !== 'N/A') {
+        if (totalPrice.toString() !== 'N/A') {
           if (totalPrice < lowestPrice) {
             lowestPrice = totalPrice;
             minPriceProvider = provider;

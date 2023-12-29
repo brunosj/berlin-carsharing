@@ -1,6 +1,8 @@
+// prettier-ignore
+
 export const longTripData = {
-  Bolt: {
-    Drive: {
+  'Bolt': {
+    'Drive': {
       '1h': {
         price: 7.5,
         pricePerKm: 0.25,
@@ -16,15 +18,15 @@ export const longTripData = {
         pricePerKm: 0.25,
         includedKms: null,
       },
-      day: {
+      'day': {
         price: 29.5,
         pricePerKm: 0.25,
         includedKms: null,
       },
     },
   },
-  MILES: {
-    S: {
+  'MILES': {
+    'S': {
       '1h': {
         price: null,
         includedKms: null,
@@ -43,14 +45,14 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.49,
       },
-      day: {
+      'day': {
         price: 45,
         includedKms: 50,
         pricePerKm: 0,
         extraKms: 0.49,
       },
     },
-    M: {
+    'M': {
       '1h': {
         price: null,
         includedKms: null,
@@ -69,14 +71,14 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.59,
       },
-      day: {
+      'day': {
         price: 49,
         includedKms: 50,
         pricePerKm: 0,
         extraKms: 0.59,
       },
     },
-    L: {
+    'L': {
       '1h': {
         price: null,
         includedKms: null,
@@ -95,14 +97,14 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.59,
       },
-      day: {
+      'day': {
         price: 100,
         includedKms: 125,
         pricePerKm: 0,
         extraKms: 0.59,
       },
     },
-    XL: {
+    'XL': {
       '1h': {
         price: null,
         includedKms: null,
@@ -121,7 +123,7 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.59,
       },
-      day: {
+      'day': {
         price: 119,
         includedKms: 125,
         pricePerKm: 0,
@@ -129,8 +131,8 @@ export const longTripData = {
       },
     },
   },
-  ShareNow: {
-    S: {
+  'ShareNow': {
+    'S': {
       '1h': {
         price: null,
         includedKms: null,
@@ -146,13 +148,13 @@ export const longTripData = {
         includedKms: null,
         pricePerKm: 0.19,
       },
-      day: {
+      'day': {
         price: 29.99,
         includedKms: null,
         pricePerKm: 0.19,
       },
     },
-    M: {
+    'M': {
       '1h': {
         price: null,
         includedKms: null,
@@ -168,13 +170,13 @@ export const longTripData = {
         includedKms: null,
         pricePerKm: 0.19,
       },
-      day: {
+      'day': {
         price: 34.99,
         includedKms: null,
         pricePerKm: 0.19,
       },
     },
-    L: {
+    'L': {
       '1h': {
         price: null,
         includedKms: null,
@@ -190,14 +192,14 @@ export const longTripData = {
         includedKms: null,
         pricePerKm: 0.19,
       },
-      day: {
+      'day': {
         price: 39.98,
         includedKms: null,
         pricePerKm: 0.19,
       },
     },
   },
-  SIXT: {
+  'SIXT': {
     '1': {
       '1h': {
         price: 6.99,
@@ -217,7 +219,7 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.45,
       },
-      day: {
+      'day': {
         price: 50,
         includedKms: 200,
         pricePerKm: 0,
@@ -243,7 +245,7 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.45,
       },
-      day: {
+      'day': {
         price: 60,
         includedKms: 200,
         pricePerKm: 0,
@@ -269,7 +271,7 @@ export const longTripData = {
         pricePerKm: 0,
         extraKms: 0.45,
       },
-      day: {
+      'day': {
         price: 69,
         includedKms: 200,
         pricePerKm: 0,

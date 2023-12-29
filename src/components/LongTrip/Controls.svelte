@@ -1,11 +1,13 @@
-<!-- Controls.svelte -->
-<script>
-  export let time;
-  export let distance;
+<script lang="ts">
+  export let time = '1h';
+  export let distance = 0;
   import Range from '../Range.svelte';
 
-  function updateDistanceFromInput(event) {
-    distance = parseFloat(event.target.value);
+  function updateDistanceFromInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement & {
+      valueAsNumber: number;
+    };
+    distance = inputElement.valueAsNumber;
   }
 </script>
 
@@ -82,7 +84,9 @@
     border: 1px solid #474747;
     border-radius: 4px;
     position: relative;
-    transition: background 0.3s, border 0.3s;
+    transition:
+      background 0.3s,
+      border 0.3s;
     cursor: pointer;
   }
 
