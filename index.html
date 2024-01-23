@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/lz_logo_icon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
       content="A simple app comparing service providers"
@@ -41,5 +41,14 @@ If you like the app and want to see the code behind it, check it out at https://
 If you have any feedback or want to contribute to the project, please get in touch via contact@landozone.net ✨
 
 `);
+
+    if (navigator.userAgent.indexOf('iPhone') > -1) {
+      document
+        .querySelector('[name=viewport]')
+        .setAttribute(
+          'content',
+          'width=device-width, initial-scale=1, maximum-scale=1'
+        );
+    }
   </script>
 </html>

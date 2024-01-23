@@ -222,6 +222,7 @@
 
   .input {
     width: 100%;
+    font-size: 1rem;
   }
 
   .currentLocation {
