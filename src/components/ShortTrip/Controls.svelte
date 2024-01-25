@@ -5,11 +5,23 @@
   import MdiPlaneCar from '../../assets/MdiPlaneCar.svelte';
   import Range from '../Range.svelte';
   import GeoLocation from './GeoLocation.svelte';
+
+  function updateDistanceFromInput(event: any) {
+    distance = parseFloat((event.target as HTMLInputElement).value);
+  }
+
+  function updateTimeFromInput(event: any) {
+    time = parseFloat((event.target as HTMLInputElement).value);
+  }
 </script>
 
 <div class="container">
+  <h3>Geolocation input</h3>
   <GeoLocation bind:distanceRounded={distance} bind:durationRounded={time} />
-  <!-- <div class="control">
+
+  <h3>Manual input</h3>
+
+  <div class="control">
     <div class="parameter">
       <label for="timeInput" class="labelText">Duration (minutes)</label>
       <div class="unit">
@@ -28,9 +40,9 @@
     <div class="range-container">
       <Range bind:value={time} max={60} />
     </div>
-  </div> -->
+  </div>
 
-  <!-- <div class="control">
+  <div class="control">
     <div class="parameter">
       <label for="distanceInput" class="labelText">Distance (km)</label>
       <div class="unit">
@@ -47,9 +59,9 @@
       </div>
     </div>
     <div class="range-container">
-      <Range bind:value={distance} id="basic-slider" max={50} />
+      <Range bind:value={distance} max={50} />
     </div>
-  </div> -->
+  </div>
 
   <div class="control">
     <div class="parameter">
@@ -82,6 +94,11 @@
     font-size: 0.9rem;
     font-family: 'BerlinTypeWeb-Bold';
     letter-spacing: 0.1rem;
+  }
+
+  h3 {
+    letter-spacing: 0.1rem;
+    font-family: 'BerlinTypeWeb-Bold';
   }
 
   .airport {

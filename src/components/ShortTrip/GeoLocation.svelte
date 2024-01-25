@@ -257,7 +257,7 @@
   .results span {
     color: #d39e00;
     transition: all 300ms;
-    box-shadow: 0px 0px 2px 0px #d39e00;
+    /* box-shadow: 0px 0px 2px 0px #d39e00; */
     -webkit-appearance: none;
     padding: 0.7rem;
   }

@@ -1,4 +1,4 @@
-![carsharing-berlin](https://brunosj.github.io/images/berlin-carsharing.jpg)
+![carsharing-berlin](https://brunosj.github.io/images/berlin-carsharing2.jpg)
 
 ## Description
 

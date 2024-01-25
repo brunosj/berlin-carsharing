@@ -18,8 +18,10 @@
       <strong>Short Trip (Less Than 1 Hour)</strong>
       <ul>
         <li>
-          Add your origin and destination (you may use your current location as
-          origin by checking the box above the field)
+          There are two ways to calculate the price: using geolocation (add your
+          origin and destination, you may use your current location as origin by
+          checking the box above the field) or manual input (add your estimated
+          time and distance)
         </li>
         <li>
           The app automatically calculates distance and duration, considering
