@@ -55,7 +55,7 @@ export const shortTripData = {
   },
   SIXT: {
     Share: {
-      pricePerMinute: 0.31,
+      pricePerMinute: 0.26,
       pricePerKm: 0,
       unlockFee: 1,
       airportFee: 8,
