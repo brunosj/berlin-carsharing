@@ -37,7 +37,9 @@
           totalPrice = price !== null ? price : 'N/A';
         } else {
           const extraKmsPrice = extraKms > 0 ? extraKms : pricePerKm;
-          const extraKmsAmount = includedKms ? distance - includedKms : 0;
+          const extraKmsAmount = includedKms
+            ? distance - includedKms
+            : distance;
           totalPrice =
             price !== null ? price + extraKmsAmount * extraKmsPrice : 'N/A';
         }

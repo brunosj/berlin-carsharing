@@ -30,10 +30,7 @@
           <td>{provider}</td>
           <td>{tier}</td>
           <td style="font-family:monospace;">
-            {airport && provider === 'Bolt'
-              ? 'N/A'
-              : // @ts-ignore
-                prices[provider][tier].toFixed(2)}
+            {prices[provider][tier].toFixed(2)}
           </td>
         </tr>
       {/each}

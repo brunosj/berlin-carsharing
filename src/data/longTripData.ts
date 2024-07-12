@@ -4,22 +4,22 @@ export const longTripData = {
   'Bolt': {
     'Drive': {
       '1h': {
-        price: 7.5,
+        price: 6.75,
         pricePerKm: 0.25,
         includedKms: null,
       },
       '3hrs': {
-        price: 22.5,
+        price: 20.25,
         pricePerKm: 0.25,
         includedKms: null,
       },
       '6hrs': {
-        price: 29.5,
+        price: 26.55,
         pricePerKm: 0.25,
         includedKms: null,
       },
       'day': {
-        price: 29.5,
+        price: 26.55,
         pricePerKm: 0.25,
         includedKms: null,
       },
@@ -34,19 +34,19 @@ export const longTripData = {
         extraKms: 0.49,
       },
       '3hrs': {
-        price: 34,
-        includedKms: 40,
+        price: 35,
+        includedKms: 35,
         pricePerKm: 0,
         extraKms: 0.49,
       },
       '6hrs': {
-        price: 39,
-        includedKms: 60,
+        price: 40,
+        includedKms: 50,
         pricePerKm: 0,
         extraKms: 0.49,
       },
       'day': {
-        price: 45,
+        price: 50,
         includedKms: 50,
         pricePerKm: 0,
         extraKms: 0.49,
@@ -60,22 +60,22 @@ export const longTripData = {
         extraKms: 0.59,
       },
       '3hrs': {
-        price: 34,
-        includedKms: 40,
+        price: 35,
+        includedKms: 35,
         pricePerKm: 0,
-        extraKms: 0.59,
+        extraKms: 0.49,
       },
       '6hrs': {
         price: 45,
-        includedKms: 60,
-        pricePerKm: 0,
-        extraKms: 0.59,
-      },
-      'day': {
-        price: 49,
         includedKms: 50,
         pricePerKm: 0,
-        extraKms: 0.59,
+        extraKms: 0.49,
+      },
+      'day': {
+        price: 60,
+        includedKms: 50,
+        pricePerKm: 0,
+        extraKms: 0.49,
       },
     },
     'L': {
@@ -86,19 +86,19 @@ export const longTripData = {
         extraKms: 0.59,
       },
       '3hrs': {
-        price: 45,
-        includedKms: 40,
+        price: 50,
+        includedKms: 35,
         pricePerKm: 0,
         extraKms: 0.59,
       },
       '6hrs': {
-        price: 59,
-        includedKms: 60,
+        price: 65,
+        includedKms: 50,
         pricePerKm: 0,
         extraKms: 0.59,
       },
       'day': {
-        price: 99,
+        price: 100,
         includedKms: 125,
         pricePerKm: 0,
         extraKms: 0.59,
@@ -112,19 +112,19 @@ export const longTripData = {
         extraKms: 0.59,
       },
       '3hrs': {
-        price: 59,
-        includedKms: 40,
+        price: 60,
+        includedKms: 35,
         pricePerKm: 0,
         extraKms: 0.59,
       },
       '6hrs': {
-        price: 74,
-        includedKms: 60,
+        price: 75,
+        includedKms: 50,
         pricePerKm: 0,
         extraKms: 0.59,
       },
       'day': {
-        price: 119,
+        price: 120,
         includedKms: 125,
         pricePerKm: 0,
         extraKms: 0.59,
@@ -202,10 +202,10 @@ export const longTripData = {
   'SIXT': {
     '1': {
       '1h': {
-        price: 6.99,
-        includedKms: 10,
+        price: 7.49,
+        includedKms: 15,
         pricePerKm: 0,
-        extraKms: 0.45,
+        extraKms: 0.29,
       },
       '3hrs': {
         price: 19,
@@ -228,8 +228,8 @@ export const longTripData = {
     },
     '2': {
       '1h': {
-        price: 7.49,
-        includedKms: 10,
+        price: 7.99,
+        includedKms: 15,
         pricePerKm: 0,
         extraKms: 0.45,
       },
@@ -254,8 +254,8 @@ export const longTripData = {
     },
     '3': {
       '1h': {
-        price: 8.49,
-        includedKms: 10,
+        price: 8.99,
+        includedKms: 15,
         pricePerKm: 0,
         extraKms: 0.45,
       },

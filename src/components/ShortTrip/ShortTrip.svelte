@@ -29,25 +29,13 @@
         const airportFee = shortTripData[provider][tier].airportFee;
         prices[provider] = prices[provider] || {};
 
-        if (provider === 'Bolt' && airport) {
-          prices[provider][tier] = 'N/A';
-        } else {
-          prices[provider][tier] =
-            pricePerMinute * time +
-            pricePerKm * distance +
-            (unlockFee ?? 0) +
-            (airport ? airportFee ?? 0 : 0);
-        }
+        prices[provider][tier] =
+          pricePerMinute * time +
+          pricePerKm * distance +
+          (unlockFee ?? 0) +
+          (airport ? airportFee ?? 0 : 0);
 
         const price = prices[provider][tier];
-
-        if (price === 'N/A') {
-          continue;
-        }
-
-        if (provider === 'Bolt' && airport) {
-          continue;
-        }
 
         if (price < lowestPrice) {
           lowestPrice = price;

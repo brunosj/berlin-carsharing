@@ -4,7 +4,7 @@
 </script>
 
 <footer in:fade={{ duration: 700, delay: 600 }}>
-  <p>latest update: 05.02.2024</p>
+  <p>latest update: 12.07.2024</p>
   <a href="https://github.com/brunosj/berlin-carsharing" target="_blank"
     >view code</a
   >

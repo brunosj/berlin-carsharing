@@ -2,9 +2,9 @@ export const shortTripData = {
   Bolt: {
     Drive: {
       pricePerMinute: 0.15,
-      pricePerKm: 0.25,
+      pricePerKm: 0.27,
       unlockFee: 0,
-      airportFee: 0,
+      airportFee: 8,
     },
   },
   MILES: {
@@ -55,7 +55,7 @@ export const shortTripData = {
   },
   SIXT: {
     Share: {
-      pricePerMinute: 0.26,
+      pricePerMinute: 0.28,
       pricePerKm: 0,
       unlockFee: 1,
       airportFee: 8,

@@ -47,7 +47,7 @@
           type="number"
           id="distanceTextInput"
           min="0"
-          max="50"
+          max="300"
           step="1"
           bind:value={distance}
           on:input={updateDistanceFromInput}
@@ -56,7 +56,7 @@
       </div>
     </div>
     <div class="range-container">
-      <Range bind:value={distance} max={200} />
+      <Range bind:value={distance} max={300} />
     </div>
   </div>
 </div>
