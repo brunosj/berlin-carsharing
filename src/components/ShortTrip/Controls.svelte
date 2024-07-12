@@ -13,6 +13,11 @@
   function updateTimeFromInput(event: any) {
     time = parseFloat((event.target as HTMLInputElement).value);
   }
+
+  function handleFocus(event: FocusEvent) {
+    const input = event.target as HTMLInputElement;
+    input.value = '';
+  }
 </script>
 
 <div class="container">
@@ -33,6 +38,7 @@
           step="1"
           bind:value={time}
           on:input={updateTimeFromInput}
+          on:focus={handleFocus}
           style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
         />
       </div>
@@ -54,6 +60,7 @@
           step="1"
           bind:value={distance}
           on:input={updateDistanceFromInput}
+          on:focus={handleFocus}
           style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
         />
       </div>
