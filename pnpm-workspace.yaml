@@ -1,0 +1,4 @@
+# Single-package repo; allowBuilds is required by pnpm 10+ for native/postinstall scripts.
+allowBuilds:
+  esbuild: true
+  svelte-preprocess: true

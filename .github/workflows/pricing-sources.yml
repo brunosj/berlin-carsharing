@@ -1,0 +1,26 @@
+name: Pricing sources
+
+on:
+  push:
+    paths:
+      - 'src/data/**'
+      - 'scripts/check-pricing-sources.mjs'
+      - '.github/workflows/pricing-sources.yml'
+  pull_request:
+    paths:
+      - 'src/data/**'
+      - 'scripts/check-pricing-sources.mjs'
+  schedule:
+    # Weekly — catch provider page changes between manual updates
+    - cron: '0 6 * * 1'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify pricing source URLs
+        run: node scripts/check-pricing-sources.mjs

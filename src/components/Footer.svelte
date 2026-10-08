@@ -1,10 +1,16 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import landozoneLogo from '$assets/lz_logo_name.png';
+  import { pricingMeta } from '../data/providerDisplayName';
+
+  function formatDate(iso: string): string {
+    const [y, m, d] = iso.split('-');
+    return `${d}.${m}.${y}`;
+  }
 </script>
 
 <footer in:fade={{ duration: 700, delay: 600 }}>
-  <p>latest update: 12.07.2024</p>
+  <p>pricing last reviewed: {formatDate(pricingMeta.lastUpdated)}</p>
   <a href="https://github.com/brunosj/berlin-carsharing" target="_blank"
     >view code</a
   >

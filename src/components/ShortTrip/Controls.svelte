@@ -1,34 +1,63 @@
 <script lang="ts">
-  export let distance = 0;
-  export let time = 0;
-  export let airport = false;
-  import MdiPlaneCar from '../../assets/MdiPlaneCar.svelte';
   import Range from '../Range.svelte';
   import GeoLocation from './GeoLocation.svelte';
+  import AirportSelect from '../AirportSelect.svelte';
+  import type { AirportLeg } from '../../lib/pricing/airport';
+  import { parseInputValue } from '../../lib/pricing/parseNumberInput';
 
-  function updateDistanceFromInput(event: any) {
-    distance = parseFloat((event.target as HTMLInputElement).value);
+  export let distance = 0;
+  export let time = 0;
+  export let airportLeg: AirportLeg = 'none';
+  export let milesParkingMinutes = 0;
+  export let inputSource: 'manual' | 'route' = 'manual';
+
+  function onDistanceInput(event: Event) {
+    inputSource = 'manual';
+    const el = event.target as HTMLInputElement;
+    distance = parseInputValue(el.value, distance);
+    el.value = String(distance);
   }
 
-  function updateTimeFromInput(event: any) {
-    time = parseFloat((event.target as HTMLInputElement).value);
+  function onTimeInput(event: Event) {
+    inputSource = 'manual';
+    const el = event.target as HTMLInputElement;
+    time = parseInputValue(el.value, time);
+    el.value = String(time);
   }
 
-  function handleFocus(event: FocusEvent) {
-    const input = event.target as HTMLInputElement;
-    input.value = '';
+  function onParkingInput(event: Event) {
+    const el = event.target as HTMLInputElement;
+    milesParkingMinutes = parseInputValue(el.value, milesParkingMinutes);
+    el.value = String(milesParkingMinutes);
+  }
+
+  function onRouteApplied() {
+    inputSource = 'route';
+  }
+
+  function onRangeChange() {
+    inputSource = 'manual';
   }
 </script>
 
 <div class="container">
   <h3>Geolocation input</h3>
-  <GeoLocation bind:distanceRounded={distance} bind:durationRounded={time} />
+  <GeoLocation
+    bind:distanceRounded={distance}
+    bind:durationRounded={time}
+    onRouteApplied={onRouteApplied}
+  />
+
+  <p class="source-hint">
+    Distance & duration:
+    <strong>{inputSource === 'route' ? 'from route' : 'manual'}</strong>
+  </p>
 
   <h3>Manual input</h3>
 
   <div class="control">
     <div class="parameter">
-      <label for="timeInput" class="labelText">Duration (minutes)</label>
+      <label for="timeTextInput" class="labelText">Duration (minutes)</label>
       <div class="unit">
         <input
           type="number"
@@ -36,68 +65,75 @@
           min="0"
           max="60"
           step="1"
-          bind:value={time}
-          on:input={updateTimeFromInput}
-          on:focus={handleFocus}
-          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
+          value={time}
+          on:input={onTimeInput}
         />
       </div>
     </div>
     <div class="range-container">
-      <Range bind:value={time} max={60} />
+      <Range
+        bind:value={time}
+        max={60}
+        on:change={onRangeChange}
+      />
     </div>
   </div>
 
   <div class="control">
     <div class="parameter">
-      <label for="distanceInput" class="labelText">Distance (km)</label>
+      <label for="distanceTextInput" class="labelText">Distance (km)</label>
       <div class="unit">
         <input
           type="number"
           id="distanceTextInput"
           min="0"
-          max="50"
-          step="1"
-          bind:value={distance}
-          on:input={updateDistanceFromInput}
-          on:focus={handleFocus}
-          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
+          max="300"
+          step="0.1"
+          value={distance}
+          on:input={onDistanceInput}
         />
       </div>
     </div>
     <div class="range-container">
-      <Range bind:value={distance} max={50} />
+      <Range
+        bind:value={distance}
+        max={300}
+        on:change={onRangeChange}
+      />
     </div>
   </div>
 
   <div class="control">
     <div class="parameter">
-      <div class="airport">
-        <label for="airportInput" class="labelText"
-          >Airport pick-up/drop-off</label
-        >
-        <MdiPlaneCar />
+      <label for="milesParkingInput" class="labelText"
+        >MILES: minutes parked (optional)</label
+      >
+      <div class="unit">
+        <input
+          type="number"
+          id="milesParkingInput"
+          min="0"
+          max="120"
+          step="1"
+          value={milesParkingMinutes}
+          on:input={onParkingInput}
+        />
       </div>
-
-      <input
-        type="checkbox"
-        id="airportCheckbox"
-        bind:checked={airport}
-        style="text-align: center; font-family:monospace;"
-      />
     </div>
   </div>
+
+  <AirportSelect bind:value={airportLeg} idPrefix="short-airport" />
 </div>
 
 <style>
-  :global(.parameter) {
+  .parameter {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
 
-  :global(.labelText) {
+  .labelText {
     font-size: 0.9rem;
     font-family: 'BerlinTypeWeb-Bold';
     letter-spacing: 0.1rem;
@@ -108,14 +144,14 @@
     font-family: 'BerlinTypeWeb-Bold';
   }
 
-  .airport {
-    display: flex;
-    flex-direction: row;
-    gap: 0.7rem;
-    align-items: center;
+  .source-hint {
+    font-size: 0.75rem;
+    font-family: monospace;
+    opacity: 0.9;
+    margin: 0.5rem 0 0;
   }
 
-  :global(.unit) {
+  .unit {
     display: flex;
     flex-direction: row;
     gap: 4px;
@@ -123,62 +159,35 @@
     align-items: center;
   }
 
-  :global(.control) {
+  .control {
     background-color: #383838;
     border-radius: 15px;
     padding: 1rem;
     margin-top: 1rem;
   }
 
-  :global(.range-container) {
+  .range-container {
     margin-top: 0.7rem;
   }
 
-  :global(input[type='number']) {
-    background-color: #242424;
-    border: 1px solid #474747;
-    border-radius: 4px;
-  }
-
-  :global(input[type='number'])::-webkit-inner-spin-button,
-  :global(input[type='number'])::-webkit-outer-spin-button {
-    background-color: #242424;
-    border: 1px solid #474747;
-    border-radius: 4px;
-  }
-
-  :global(input[type='checkbox']) {
-    /* Styles for the default checkbox */
-    appearance: none;
-    -webkit-appearance: none;
-    background-color: #242424;
-    width: 1.5rem;
+  input[type='number'] {
+    width: 3.5rem;
     height: 1.5rem;
+    text-align: center;
+    font-family: monospace;
+    color: white;
+    background-color: #242424;
     border: 1px solid #474747;
     border-radius: 4px;
-    position: relative;
-    transition:
-      background 0.3s,
-      border 0.3s;
-    cursor: pointer;
   }
 
-  :global(input[type='checkbox']):checked {
-    /* Styles for the checked checkbox */
-    background: linear-gradient(90deg, #d39e00, #bb2e23);
-    border: 1px solid #fff;
-  }
-
-  :global(input[type='checkbox']):focus {
-    /* Styles for the checkbox when focused */
-    outline: none;
+  input[type='number']:focus-visible {
+    outline: 2px solid #d39e00;
+    outline-offset: 2px;
   }
 
   @media (min-width: 768px) {
-    :global(.unit) {
-      gap: 8px;
-    }
-    :global(.labelText) {
+    .labelText {
       font-size: 1rem;
     }
   }

@@ -8,9 +8,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:pricing": "node scripts/check-pricing-sources.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
+    "vitest": "^2.1.8",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tsconfig/svelte": "^5.0.4",
     "@types/google.maps": "^3.55.11",
@@ -21,8 +25,6 @@
     "vite": "^5.3.3"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.16.6",
-    "dotenv": "^16.4.5",
-    "path": "^0.12.7"
+    "@googlemaps/js-api-loader": "^1.16.6"
   }
 }

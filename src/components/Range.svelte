@@ -29,14 +29,20 @@
   // Dispatch 'change' events
   const dispatch = createEventDispatcher();
 
-  // Mouse shield used onMouseDown to prevent any mouse events penetrating other elements,
-  // ie. hover events on other elements while dragging. Especially for Safari
-  const mouseEventShield = document.createElement('div');
-  mouseEventShield.setAttribute('class', 'mouse-over-shield');
-  mouseEventShield.addEventListener('mouseover', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  });
+  /** Per-slider shield so two ranges on one page do not share one overlay. */
+  let mouseEventShield: HTMLDivElement | null = null;
+
+  function getMouseEventShield(): HTMLDivElement {
+    if (!mouseEventShield) {
+      mouseEventShield = document.createElement('div');
+      mouseEventShield.setAttribute('class', 'mouse-over-shield');
+      mouseEventShield.addEventListener('mouseover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+    return mouseEventShield;
+  }
 
   function resizeWindow() {
     elementX = element.getBoundingClientRect().left;
@@ -60,15 +66,16 @@
 
   function onDragStart(e) {
     // If mouse event add a pointer events shield
-    if (e.type === 'mousedown') document.body.append(mouseEventShield);
+    if (e.type === 'mousedown') document.body.append(getMouseEventShield());
     currentThumb = thumb;
   }
 
   function onDragEnd(e) {
     // If using mouse - remove pointer event shield
     if (e.type === 'mouseup') {
-      if (document.body.contains(mouseEventShield))
-        document.body.removeChild(mouseEventShield);
+      const shield = mouseEventShield;
+      if (shield && document.body.contains(shield))
+        document.body.removeChild(shield);
       // Needed to check whether thumb and mouse overlap after shield removed
       if (isMouseInElement(e, thumb)) thumbHover = true;
     }

@@ -19,25 +19,31 @@ This app is a minimalist [Svelte](https://svelte.dev/) + [Vite](https://vitejs.d
 gh repo clone brunosj/berlin-carsharing
 ```
 
-2. Install dependencies
+2. Copy `.env.example` to `.env` and set `VITE_GOOGLE_MAPS_API_KEY` (restrict the key by HTTP referrer in Google Cloud).
+
+3. Install dependencies
 
 ```bash
-npm install
-# or
-yarn install
+pnpm install
 ```
 
-3. Navigate into the site's directory and start the development server
+4. Start the development server
 
 ```bash
-npm run dev
-# or
-yarn dev
+pnpm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
 ## Further development
+
+Pricing lives in `src/data/` with sources and `lastUpdated` in `src/data/pricingMeta.json`. After editing tariffs, bump `lastUpdated` and run:
+
+```bash
+pnpm run check:pricing
+```
+
+GitHub Actions runs pricing-source checks weekly and `pnpm run check`, `pnpm run test`, and `pnpm run build` on pull requests.
 
 Any input or feedback is appreciated!
 

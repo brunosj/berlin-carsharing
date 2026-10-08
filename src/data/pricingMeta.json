@@ -1,0 +1,72 @@
+{
+  "lastUpdated": "2026-10-08",
+  "notes": "Rates are baseline published prices. Bolt Drive and dynamic SIXT/Free2move tariffs may differ in the app.",
+  "assumptions": {
+    "sixtPackageIncludedKm": "Included km per SIXT hour/day package in longTripData are estimates — not published on the tariff page."
+  },
+  "providers": {
+    "Bolt": {
+      "displayName": "Bolt Drive",
+      "sources": [
+        {
+          "label": "Bolt Drive (Germany)",
+          "url": "https://bolt.eu/de-de/drive/",
+          "checks": []
+        }
+      ]
+    },
+    "MILES": {
+      "displayName": "MILES",
+      "sources": [
+        {
+          "label": "Pricing",
+          "url": "https://www.miles-mobility.com/de/pricing",
+          "checks": ["0,79", "39,99", "44,99"]
+        },
+        {
+          "label": "Fees",
+          "url": "https://www.miles-mobility.com/de/pricing/fees",
+          "checks": ["Unlock Fee", "Berlin (BER)"]
+        }
+      ]
+    },
+    "Free2move": {
+      "displayName": "Free2move",
+      "formerly": "Share Now",
+      "sources": [
+        {
+          "label": "Car-sharing Berlin",
+          "url": "https://www.free2move.com/de/en/car-sharing/berlin/",
+          "checks": ["0,17", "0,24", "20,42"]
+        },
+        {
+          "label": "Rental pricing Berlin",
+          "url": "https://www.free2move.com/de/en/car-rental-berlin/",
+          "checks": ["6,99", "0,19", "60 km"]
+        },
+        {
+          "label": "Fees policy (2026 PDF)",
+          "url": "https://www.free2move.com/api/media/20260319/OpbkHwvTmU90aRgjU0Ee5D4Tzq7fQv5zeSHIspwNjWSyEemlwJcxHQ6WEs0FPnilEKOE3u3BQrz-6uyYYi75mSqoDRlODeI84tykrECtWJV9XUvKzBphouERj93Nf39o/2026-fees-and-costs-policy-free-2-move-2026-de-en.pdf",
+          "checks": ["%PDF"]
+        }
+      ]
+    },
+    "SIXT": {
+      "displayName": "SIXT share",
+      "sources": [
+        {
+          "label": "Tariffs",
+          "url": "https://www.sixt.de/share/tarife/",
+          "checks": ["0,15", "0,95", "19,99"],
+          "optional": true
+        },
+        {
+          "label": "Berlin",
+          "url": "https://www.sixt.de/share/carsharing/berlin/",
+          "checks": ["Unlock Fee"],
+          "optional": true
+        }
+      ]
+    }
+  }
+}

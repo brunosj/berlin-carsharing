@@ -2,26 +2,42 @@
   export let time = '1h';
   export let distance = 0;
   import Range from '../Range.svelte';
+  import AirportSelect from '../AirportSelect.svelte';
+  import type { AirportLeg } from '../../lib/pricing/airport';
+  import type { LongTripData } from '../../types/types';
+  import { parseInputValue } from '../../lib/pricing/parseNumberInput';
 
-  function updateDistanceFromInput(event: Event) {
-    const inputElement = event.target as HTMLInputElement & {
-      valueAsNumber: number;
-    };
-    distance = inputElement.valueAsNumber;
+  export let longTripData: LongTripData = {};
+  export let airportLeg: AirportLeg = 'none';
+
+  function onDistanceInput(event: Event) {
+    const el = event.target as HTMLInputElement & { valueAsNumber: number };
+    distance = parseInputValue(el.value, distance);
+    el.value = String(distance);
   }
 
-  function handleFocus(event: FocusEvent) {
-    const input = event.target as HTMLInputElement;
-    input.value = '';
-  }
+  $: packageKmHint = (() => {
+    const examples: number[] = [];
+    for (const provider of Object.keys(longTripData)) {
+      const firstTier = Object.keys(longTripData[provider])[0];
+      const slot = longTripData[provider][firstTier]?.[time];
+      if (slot?.includedKms != null) examples.push(slot.includedKms);
+    }
+    if (examples.length === 0) return null;
+    const min = Math.min(...examples);
+    const max = Math.max(...examples);
+    return min === max
+      ? `Packages for ${time} often include about ${min} km (varies by provider/tier).`
+      : `Included km for ${time} varies by tier (about ${min}–${max} km in this data). SIXT included km are estimates.`;
+  })();
 </script>
 
 <div class="controls container">
   <div class="control">
     <div class="parameter">
-      <label for="timeInput" class="labelText">Duration (hours)</label>
+      <span class="labelText" id="long-duration-label">Duration (hours)</span>
     </div>
-    <div class="duration range-container">
+    <div class="duration range-container" role="radiogroup" aria-labelledby="long-duration-label">
       <div class="unit">
         <input type="radio" id="one-hour" bind:group={time} value="1h" />
         <label for="one-hour" class="unitText"> 1 hr </label>
@@ -42,22 +58,23 @@
         <label for="day" class="unitText"> 24 hrs </label>
       </div>
     </div>
+    {#if packageKmHint}
+      <p class="hint">{packageKmHint}</p>
+    {/if}
   </div>
 
   <div class="control">
     <div class="parameter">
-      <label for="distanceInput" class="labelText">Distance (km)</label>
+      <label for="longDistanceTextInput" class="labelText">Distance (km)</label>
       <div class="unit">
         <input
           type="number"
-          id="distanceTextInput"
+          id="longDistanceTextInput"
           min="0"
           max="300"
           step="1"
-          bind:value={distance}
-          on:input={updateDistanceFromInput}
-          on:focus={handleFocus}
-          style="width: 3.5rem; height:1.5rem;text-align: center; font-family:monospace; color:white;"
+          value={distance}
+          on:input={onDistanceInput}
         />
       </div>
     </div>
@@ -65,6 +82,8 @@
       <Range bind:value={distance} max={300} />
     </div>
   </div>
+
+  <AirportSelect bind:value={airportLeg} idPrefix="long-airport" />
 </div>
 
 <style>
@@ -75,13 +94,52 @@
     align-items: center;
   }
 
+  .hint {
+    font-size: 0.7rem;
+    font-family: monospace;
+    opacity: 0.85;
+    margin: 0.75rem 0 0;
+    text-align: left;
+  }
+
   .unitText {
     font-size: 0.8rem;
     font-family: 'BerlinTypeWeb-Bold';
     letter-spacing: 0.1rem;
   }
+
+  .labelText {
+    font-size: 0.9rem;
+    font-family: 'BerlinTypeWeb-Bold';
+    letter-spacing: 0.1rem;
+  }
+
+  .parameter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .control {
+    background-color: #383838;
+    border-radius: 15px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .unit input[type='number'] {
+    width: 3.5rem;
+    height: 1.5rem;
+    text-align: center;
+    font-family: monospace;
+    color: white;
+    background-color: #242424;
+    border: 1px solid #474747;
+    border-radius: 4px;
+  }
+
   :global(input[type='radio']) {
-    /* Styles for the default radio */
     appearance: none;
     -webkit-appearance: none;
     background-color: #242424;
@@ -89,22 +147,17 @@
     height: 1.5rem;
     border: 1px solid #474747;
     border-radius: 4px;
-    position: relative;
-    transition:
-      background 0.3s,
-      border 0.3s;
     cursor: pointer;
   }
 
-  :global(input[type='radio']):checked {
-    /* Styles for the checked radio */
-    background: linear-gradient(90deg, #d39e00, #bb2e23);
-    border: 1px solid #fff;
+  :global(input[type='radio']:focus-visible) {
+    outline: 2px solid #d39e00;
+    outline-offset: 2px;
   }
 
-  :global(input[type='radio']):focus {
-    /* Styles for the checkbox when focused */
-    outline: none;
+  :global(input[type='radio']:checked) {
+    background: linear-gradient(90deg, #d39e00, #bb2e23);
+    border: 1px solid #fff;
   }
 
   @media (min-width: 768px) {
