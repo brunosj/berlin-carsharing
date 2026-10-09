@@ -1,22 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { aggregateDirectionsLegs } from './parseDirectionsRoute';
+import { aggregateRouteLegs } from './parseDirectionsRoute';
 
-describe('aggregateDirectionsLegs', () => {
+describe('aggregateRouteLegs', () => {
   it('sums distance and duration across legs', () => {
-    const route = {
-      legs: [
-        {
-          distance: { value: 5000, text: '5 km' },
-          duration: { value: 600, text: '10 mins' },
-        },
-        {
-          distance: { value: 3000, text: '3 km' },
-          duration: { value: 480, text: '8 mins' },
-        },
-      ],
-    } as google.maps.DirectionsRoute;
-
-    const r = aggregateDirectionsLegs(route);
+    const r = aggregateRouteLegs([
+      {
+        distanceKm: 5,
+        durationMinutes: 10,
+        distanceText: '5 km',
+        durationText: '10 min',
+      },
+      {
+        distanceKm: 3,
+        durationMinutes: 8,
+        distanceText: '3 km',
+        durationText: '8 min',
+      },
+    ]);
     expect(r).not.toBeNull();
     expect(r!.distanceKm).toBe(8);
     expect(r!.durationMinutes).toBe(18);

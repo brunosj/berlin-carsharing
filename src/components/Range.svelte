@@ -1,12 +1,13 @@
 <script lang="ts">
   // @ts-nocheck
 
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onDestroy } from 'svelte';
   import { fly, fade } from 'svelte/transition';
 
   // Props
   export let min = 0;
   export let max = 100;
+  export let step = 1;
   export let initialValue = 0;
   export let id = null;
   export let value =
@@ -25,6 +26,7 @@
   let thumbHover = false;
   let keydownAcceleration = 0;
   let accelerationTimer = null;
+  let resizeObserver: ResizeObserver | null = null;
 
   // Dispatch 'change' events
   const dispatch = createEventDispatcher();
@@ -44,8 +46,44 @@
     return mouseEventShield;
   }
 
-  function resizeWindow() {
+  /**
+   * Remeasure layout. Required because panels can mount while `display: none`
+   * (elementX/width are 0) and only become visible later without remounting.
+   */
+  function refreshElementMetrics() {
+    if (!element) return;
     elementX = element.getBoundingClientRect().left;
+    updateThumbPosition();
+  }
+
+  function clampToStep(raw) {
+    const stepped =
+      step > 0 ? Math.round((raw - min) / step) * step + min : raw;
+    const clamped = Math.min(max, Math.max(min, stepped));
+    // Avoid float noise for fractional steps (e.g. 0.1)
+    const decimals = String(step).includes('.')
+      ? String(step).split('.')[1].length
+      : 0;
+    return decimals > 0
+      ? Number(clamped.toFixed(decimals))
+      : Math.round(clamped);
+  }
+
+  function updateThumbPosition() {
+    if (!progressBar || !thumb || !container) return;
+    const trackWidth = container.clientWidth;
+    if (trackWidth <= 0) return;
+
+    const clamped = Math.min(max, Math.max(min, value));
+    const percent = ((clamped - min) * 100) / (max - min);
+    const offsetLeft = (trackWidth - 10) * (percent / 100) + 5;
+
+    thumb.style.left = `${offsetLeft}px`;
+    progressBar.style.width = `${offsetLeft}px`;
+  }
+
+  function resizeWindow() {
+    refreshElementMetrics();
   }
 
   // Allows both bind:value and on:change for parent value retrieval
@@ -55,6 +93,7 @@
   }
 
   function onTrackEvent(e) {
+    refreshElementMetrics();
     // Update value immediately before beginning drag
     updateValueOnEvent(e);
     onDragStart(e);
@@ -65,6 +104,7 @@
   }
 
   function onDragStart(e) {
+    refreshElementMetrics();
     // If mouse event add a pointer events shield
     if (e.type === 'mousedown') document.body.append(getMouseEventShield());
     currentThumb = thumb;
@@ -96,20 +136,20 @@
     // Max out at +/- 10 to value per event (50 events / 5)
     // 100 below is to increase the amount of events required to reach max velocity
     if (keydownAcceleration < 50) keydownAcceleration++;
-    let throttled = Math.ceil(keydownAcceleration / 5);
+    let throttled = Math.ceil(keydownAcceleration / 5) * step;
 
     if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
       if (value + throttled > max || value >= max) {
         setValue(max);
       } else {
-        setValue(value + throttled);
+        setValue(clampToStep(value + throttled));
       }
     }
     if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
       if (value - throttled < min || value <= min) {
         setValue(min);
       } else {
-        setValue(value - throttled);
+        setValue(clampToStep(value - throttled));
       }
     }
 
@@ -119,6 +159,9 @@
   }
 
   function calculateNewValue(clientX) {
+    refreshElementMetrics();
+    if (!container || container.clientWidth <= 0) return;
+
     // Find distance between cursor and element's left cord (20px / 2 = 10px) - Center of thumb
     let delta = clientX - (elementX + 10);
 
@@ -128,8 +171,8 @@
     // Limit percent 0 -> 100
     percent = percent < 0 ? 0 : percent > 100 ? 100 : percent;
 
-    // Limit value min -> max
-    setValue(parseInt((percent * (max - min)) / 100) + min);
+    const raw = (percent * (max - min)) / 100 + min;
+    setValue(clampToStep(raw));
   }
 
   // Handles both dragging of touch/mouse as well as simple one-off click/touches
@@ -151,23 +194,29 @@
   }
 
   // React to left position of element relative to window
-  $: if (element) elementX = element.getBoundingClientRect().left;
+  $: if (element) refreshElementMetrics();
+
+  // When a parent panel toggles from display:none → visible, width goes 0 → N
+  $: if (container && typeof ResizeObserver !== 'undefined') {
+    resizeObserver?.disconnect();
+    resizeObserver = new ResizeObserver(() => refreshElementMetrics());
+    resizeObserver.observe(container);
+  }
+
+  onDestroy(() => {
+    resizeObserver?.disconnect();
+    clearTimeout(accelerationTimer);
+  });
 
   // Set a class based on if dragging
   $: holding = Boolean(currentThumb);
 
   // Update progressbar and thumb styles to represent value
-  $: if (progressBar && thumb) {
-    // Limit value min -> max
-    value = value > min ? value : min;
-    value = value < max ? value : max;
-
-    let percent = ((value - min) * 100) / (max - min);
-    let offsetLeft = (container.clientWidth - 10) * (percent / 100) + 5;
-
-    // Update thumb position + active range track width
-    thumb.style.left = `${offsetLeft}px`;
-    progressBar.style.width = `${offsetLeft}px`;
+  $: if (progressBar && thumb && container) {
+    value;
+    min;
+    max;
+    updateThumbPosition();
   }
 </script>
 
@@ -194,7 +243,7 @@
     on:touchstart={onTrackEvent}
   >
     <div class="range__track" bind:this={container}>
-      <div class="range__track--highlighted" bind:this={progressBar} />
+      <div class="range__track--highlighted" bind:this={progressBar}></div>
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <!-- svelte-ignore a11y-mouse-events-have-key-events -->
       <div

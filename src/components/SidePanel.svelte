@@ -137,7 +137,8 @@
 
   .close {
     appearance: none;
-    border: 1px solid #383838;
+    border: 1px solid #474747;
+    border-radius: 4px;
     background: #242424;
     color: #fff;
     width: 2rem;
@@ -151,10 +152,16 @@
     padding: 0;
   }
 
-  .close:hover,
+  .close:hover {
+    border-color: #d39e00;
+    color: #d39e00;
+  }
+
   .close:focus-visible {
     outline: 2px solid #d39e00;
+    outline-offset: 2px;
     border-color: #d39e00;
+    color: #d39e00;
   }
 
   .body {

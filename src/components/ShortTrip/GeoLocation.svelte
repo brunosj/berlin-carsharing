@@ -3,10 +3,8 @@
   import { Loader } from '@googlemaps/js-api-loader';
   import Location from '../../assets/Location.svelte';
   import Circle from '../../assets/Circle.svelte';
-  import {
-    aggregateDirectionsLegs,
-    directionsStatusMessage,
-  } from '../../lib/pricing/parseDirectionsRoute';
+  import { aggregateRouteLegs } from '../../lib/pricing/parseDirectionsRoute';
+  import { fetchConsecutiveDrivingLegs } from '../../lib/pricing/fetchRouteLegs';
 
   type PlaceLike =
     | google.maps.places.PlaceResult
@@ -214,44 +212,27 @@
       return;
     }
 
-    const directionsService = new google.maps.DirectionsService();
-    directionsService.route(
-      {
-        origin,
-        destination: dest,
-        waypoints: waypointPlaces.map((location) => ({
-          location,
-          stopover: true,
-        })),
-        optimizeWaypoints: false,
-        travelMode: google.maps.TravelMode.DRIVING,
-        drivingOptions: {
-          departureTime: new Date(Date.now()),
-          trafficModel: google.maps.TrafficModel.BEST_GUESS,
-        },
-      },
-      (response, status) => {
-        if (status !== 'OK' || !response?.routes[0]) {
-          errorMessage = directionsStatusMessage(status);
-          return;
-        }
+    // Distance Matrix between consecutive stops — avoids legacy Directions API
+    // (often disabled / not activated on newer Google Cloud projects).
+    const points = [origin, ...waypointPlaces, dest];
+    const result = await fetchConsecutiveDrivingLegs(points);
+    if ('error' in result) {
+      errorMessage = result.error;
+      return;
+    }
 
-        const route = response.routes[0];
-        const aggregated = aggregateDirectionsLegs(route);
-        if (!aggregated) {
-          errorMessage = 'Could not read route distance or duration.';
-          return;
-        }
+    const aggregated = aggregateRouteLegs(result.legs);
+    if (!aggregated) {
+      errorMessage = 'Could not read route distance or duration.';
+      return;
+    }
 
-        legCount = route.legs?.length ?? 0;
-        const stopsLabel =
-          legCount > 1 ? ` (${legCount} legs)` : '';
-        routeSummary = `${aggregated.distanceText} — ${aggregated.durationText}${stopsLabel}`;
-        distanceRounded = aggregated.distanceKm;
-        durationRounded = aggregated.durationMinutes;
-        onRouteApplied?.();
-      }
-    );
+    legCount = result.legs.length;
+    const stopsLabel = legCount > 1 ? ` (${legCount} legs)` : '';
+    routeSummary = `${aggregated.distanceText} — ${aggregated.durationText}${stopsLabel}`;
+    distanceRounded = aggregated.distanceKm;
+    durationRounded = aggregated.durationMinutes;
+    onRouteApplied?.();
   }
 
   async function onCurrentLocationChange() {

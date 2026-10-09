@@ -105,14 +105,21 @@
     font-size: 0.85rem;
     color: #fff;
     background: #242424;
-    border: 1px solid #383838;
-    padding: 0.55rem 1rem;
+    border: 1px solid #474747;
+    border-radius: 4px;
+    padding: 0.35rem 0.75rem;
+    min-height: 1.5rem;
     cursor: pointer;
   }
 
-  .info-btn:hover,
+  .info-btn:hover {
+    border-color: #d39e00;
+    color: #d39e00;
+  }
+
   .info-btn:focus-visible {
     outline: 2px solid #d39e00;
+    outline-offset: 2px;
     border-color: #d39e00;
     color: #d39e00;
   }
