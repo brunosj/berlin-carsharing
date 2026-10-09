@@ -1,4 +1,8 @@
-# Single-package repo; allowBuilds is required by pnpm 10+ for native/postinstall scripts.
+# Single-package workspace (required when this file exists).
+packages:
+  - '.'
+
+# pnpm 10+: approve postinstall scripts for Vite/Svelte toolchain.
 allowBuilds:
   esbuild: true
   svelte-preprocess: true
